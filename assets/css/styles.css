@@ -167,6 +167,7 @@ em{font-style:italic}
 .mf-header-inner{
   position:relative;overflow:hidden;min-height:78px;
   display:flex;align-items:center;gap:30px;
+  padding-inline:22px;
   border:1px solid transparent;border-radius:18px;
   transition:box-shadow var(--t-ui);
 }
@@ -180,13 +181,13 @@ em{font-style:italic}
   border:1px solid rgba(255,255,255,.65);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
 }
-.mf-brand{display:flex;align-items:center;gap:13px;color:var(--mf-blue)}
+.mf-brand{display:flex;align-items:center;gap:14px;color:var(--mf-blue)}
 /* no topo, a marca ganha pílula de vidro própria (igual ao protótipo) */
 .mf-header:not(.is-scrolled) .mf-brand{
   background:rgba(255,255,255,.72);
   backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);
   border:1px solid rgba(255,255,255,.65);border-radius:16px;
-  padding:8px 16px 8px 8px;
+  padding:9px 20px 9px 9px;
 }
 /* logo: respiração + shine + halo (SPEC §3) */
 .mf-brand-mark{position:relative;flex:0 0 auto;height:54px;width:54px;border-radius:14px;transition:height var(--t-ui),width var(--t-ui),border-radius var(--t-ui);animation:mfLogoBreath 4.2s var(--ease) infinite}
@@ -327,7 +328,7 @@ em{font-style:italic}
 
 /* ---------- Responsivo: header / footer / mobile ---------- */
 @media (max-width:860px){
-  .mf-header-inner{min-height:66px;gap:12px}
+  .mf-header-inner{min-height:66px;gap:12px;padding-inline:14px}
   .mf-menu-toggle{display:flex;margin-left:auto}
   .mf-header-action{display:none}
   .mf-nav{
