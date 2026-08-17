@@ -157,24 +157,49 @@ em{font-style:italic}
 .mf-text-link:hover{gap:13px}
 .mf-text-link:hover svg{transform:translateX(4px)}
 
-/* ---------- Header ---------- */
+/* ---------- Header (ilha flutuante de vidro — SPEC §1) ---------- */
 .mf-header{
   position:sticky;top:0;z-index:90;
-  background:rgba(255,255,255,.86);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--mf-line);
-  transition:box-shadow var(--t-ui),background var(--t-ui);
+  background:transparent;border-bottom:0;
+  padding:14px 0;transition:padding var(--t-ui);
 }
-.mf-header.is-scrolled{box-shadow:0 14px 36px -28px rgba(12,26,58,.5);background:rgba(255,255,255,.95)}
-.mf-header-inner{display:flex;align-items:center;gap:30px;min-height:78px}
-.mf-brand{display:flex;align-items:center;gap:11px;font-weight:800;color:var(--mf-blue);letter-spacing:-.02em;font-size:18px}
-.mf-brand img{height:44px;width:auto}
+.mf-header.is-scrolled{padding:10px 0}
+.mf-header-inner{
+  position:relative;overflow:hidden;min-height:78px;
+  display:flex;align-items:center;gap:30px;
+  border:1px solid transparent;border-radius:18px;
+  transition:background var(--t-ui),box-shadow var(--t-ui),border-color var(--t-ui);
+}
+.mf-header.is-scrolled .mf-header-inner{
+  background:rgba(255,255,255,.72);
+  backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);
+  border-color:rgba(255,255,255,.65);
+  box-shadow:0 18px 44px -20px rgba(2,51,132,.35),inset 0 1px 0 rgba(255,255,255,.85);
+}
+.mf-brand{display:flex;align-items:center;gap:13px;color:var(--mf-blue)}
+/* logo: respiração + shine + halo (SPEC §3) */
+.mf-brand-mark{position:relative;flex:0 0 auto;height:54px;width:54px;border-radius:14px;transition:height var(--t-ui),width var(--t-ui),border-radius var(--t-ui);animation:mfLogoBreath 4.2s var(--ease) infinite}
+.mf-brand-clip{position:absolute;inset:0;border-radius:inherit;overflow:hidden}
+.mf-brand-clip>img{width:100%;height:100%;object-fit:cover;display:block}
+.mf-brand-mark .mf-brand-shine{position:absolute;inset:-40% auto -40% -90%;width:55%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-18deg);animation:mfLogoShine 5.5s var(--ease) infinite;animation-delay:1.2s;pointer-events:none}
+.mf-brand-mark .mf-brand-halo{position:absolute;inset:-6px;border-radius:18px;z-index:-1;background:radial-gradient(closest-side,rgba(31,168,154,.4),transparent 72%);animation:mfLogoHalo 4.2s var(--ease) infinite;pointer-events:none}
+@keyframes mfLogoBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+@keyframes mfLogoShine{0%{left:-90%}18%,100%{left:160%}}
+@keyframes mfLogoHalo{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
+.mf-header.is-scrolled .mf-brand-mark{height:42px;width:42px;border-radius:11px}
+.mf-brand-name{display:flex;flex-direction:column;line-height:1}
+.mf-brand-name b{font-weight:800;letter-spacing:-.02em;font-size:21px;white-space:nowrap;transition:font-size var(--t-ui)}
+.mf-header.is-scrolled .mf-brand-name b{font-size:16.5px}
+.mf-brand-name small{font-weight:500;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--mf-muted);margin-top:4px;white-space:nowrap;transition:font-size var(--t-ui)}
+.mf-header.is-scrolled .mf-brand-name small{font-size:9px}
 .mf-nav{display:flex;align-items:center;gap:28px;margin-left:auto}
 .mf-nav a{font-size:15px;font-weight:600;color:var(--mf-copy);position:relative;padding:6px 0;transition:color var(--t-micro)}
 .mf-nav a::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:2px;background:var(--mf-accent);transform:scaleX(0);transform-origin:left;transition:transform var(--t-ui)}
 .mf-nav a:hover,.mf-nav a.is-active{color:var(--mf-blue)}
 .mf-nav a:hover::after,.mf-nav a.is-active::after{transform:scaleX(1)}
 .mf-header-action{margin-left:8px;flex:0 0 auto}
-.mf-scroll-progress{position:absolute;left:0;bottom:0;height:3px;width:100%;transform:scaleX(var(--mf-scroll-progress,0));transform-origin:left;background:linear-gradient(90deg,var(--mf-blue),var(--mf-blue-mid) 60%,var(--mf-accent));z-index:2}
+.mf-scroll-progress{position:absolute;left:0;bottom:0;height:3px;width:100%;transform:scaleX(var(--mf-scroll-progress,0));transform-origin:right;background:linear-gradient(90deg,var(--mf-blue-mid),var(--mf-accent) 55%,#5ad6c9);z-index:2;opacity:0;transition:opacity var(--t-ui)}
+.mf-header.is-scrolled .mf-scroll-progress{opacity:1}
 
 /* Botão menu mobile */
 .mf-menu-toggle{display:none;width:46px;height:46px;align-items:center;justify-content:center;border-radius:10px;color:var(--mf-blue)}
@@ -249,8 +274,16 @@ em{font-style:italic}
 /* ============================================================
    HERO
    ============================================================ */
-.mf-hero{position:relative;overflow:hidden;background:var(--mf-paper);border-bottom:1px solid var(--mf-line)}
-.mf-hero::before{content:"";position:absolute;top:-20%;right:0;width:54%;height:120%;background:radial-gradient(ellipse at 95% 25%,var(--mf-blue-soft),transparent 62%);pointer-events:none;z-index:0}
+/* ---------- Hero (coluna de fundo + véu fino — SPEC §4) ---------- */
+.mf-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--mf-line)}
+.mf-hero-spine{position:absolute;inset:-6% 0 0;z-index:0;pointer-events:none;will-change:transform}
+.mf-hero-spine img{width:100%;height:100%;object-fit:cover;object-position:center}
+.mf-hero-veil{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.62),rgba(255,255,255,.34) 46%,rgba(255,255,255,.30) 100%),
+    linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.38) 72%,var(--mf-paper) 100%);
+  backdrop-filter:saturate(140%) blur(2.5px);-webkit-backdrop-filter:saturate(140%) blur(2.5px);
+}
 .mf-hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.22fr) minmax(360px,.78fr);gap:54px;align-items:center;min-height:min(84vh,780px);padding:64px 0}
 .mf-hero-copy{max-width:640px}
 .mf-hero-copy h1 em{font-style:italic;color:var(--mf-accent)}
@@ -265,7 +298,10 @@ em{font-style:italic}
 .mf-hero-media{position:relative;display:flex;align-items:center;justify-content:center;min-height:380px}
 .mf-hero-orbit{position:absolute;inset:0;margin:auto;width:min(420px,86%);aspect-ratio:1;border:1.5px solid rgba(2,51,132,.22);border-radius:50%;animation:mfSpin 44s linear infinite}
 .mf-hero-orbit::after{content:"";position:absolute;inset:38px;border-radius:50%;background:radial-gradient(circle,rgba(31,168,154,.14),transparent 68%)}
-.mf-hero-media .mf-hero-photo{position:relative;width:min(100%,480px);aspect-ratio:4/5;object-fit:cover;border-radius:var(--radius-lg);box-shadow:var(--shadow-card);transform:translateY(var(--hero-parallax-y,0))}
+.mf-hero-media .mf-hero-photo{position:relative;width:min(100%,480px);aspect-ratio:4/5;object-fit:cover;border-radius:var(--radius-lg);box-shadow:var(--shadow-card);transform:translateY(var(--hero-parallax-y,0));transition:transform .6s var(--ease-out)}
+.mf-hero-media:hover .mf-hero-photo{transform:translateY(var(--hero-parallax-y,0)) scale(1.015)}
+.mf-hero-particles{position:absolute;inset:0;margin:auto;width:min(100%,480px);aspect-ratio:4/5;border-radius:var(--radius-lg);pointer-events:none;opacity:0;transition:opacity .6s var(--ease)}
+.mf-hero-media:hover .mf-hero-particles{opacity:1}
 .mf-hero-badge{position:absolute;right:-6px;bottom:18px;z-index:3;display:flex;align-items:center;gap:10px;background:var(--mf-paper);color:var(--mf-blue);padding:11px 16px;border-radius:14px;box-shadow:var(--shadow-card);font-weight:800;font-size:13px;border:1px solid var(--mf-line)}
 .mf-hero-badge b{font-size:22px;line-height:1;color:var(--mf-accent)}
 @keyframes mfSpin{to{transform:rotate(360deg)}}
@@ -282,7 +318,7 @@ em{font-style:italic}
   .mf-menu-toggle{display:flex;margin-left:auto}
   .mf-header-action{display:none}
   .mf-nav{
-    position:fixed;top:66px;left:0;right:0;z-index:88;
+    position:fixed;top:80px;left:0;right:0;z-index:88;
     background:rgba(255,255,255,.98);backdrop-filter:blur(16px);
     flex-direction:column;align-items:stretch;gap:0;padding:6px 20px 24px;
     border-bottom:1px solid var(--mf-line);

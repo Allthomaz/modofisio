@@ -30,8 +30,14 @@
   <header class="mf-header">
     <div class="mf-wrap mf-header-inner">
       <a class="mf-brand" href="#inicio" aria-label="Modo Fisio — início">
-        <img src="assets/images/logo-mark-160.jpg" alt="" width="34" height="34" style="height:34px;width:34px;border-radius:9px;object-fit:cover;flex:0 0 auto">
-        Modo Fisio
+        <span class="mf-brand-mark">
+          <span class="mf-brand-clip">
+            <img src="assets/images/logo-mark-160.jpg" alt="" width="54" height="54">
+            <span class="mf-brand-shine" aria-hidden="true"></span>
+          </span>
+          <span class="mf-brand-halo" aria-hidden="true"></span>
+        </span>
+        <span class="mf-brand-name"><b>Modo Fisio</b><small>Fisioterapia &amp; Pilates</small></span>
       </a>
       <nav class="mf-nav" aria-label="Navegação principal">
         <a href="#servicos">Serviços</a>
@@ -46,13 +52,15 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
       <button class="mf-menu-toggle" aria-label="Abrir menu" aria-expanded="false"><span></span></button>
+      <span class="mf-scroll-progress" aria-hidden="true"></span>
     </div>
-    <span class="mf-scroll-progress" aria-hidden="true"></span>
   </header>
 
   <main id="inicio">
     <!-- ============ HERO (spec §8.2) ============ -->
     <section class="mf-hero">
+      <div class="mf-hero-spine" aria-hidden="true"><img src="assets/images/Human_spine_graphic_design_layout_202608171628.jpeg" alt=""></div>
+      <div class="mf-hero-veil" aria-hidden="true"></div>
       <div class="mf-wrap mf-hero-grid">
         <div class="mf-hero-copy">
           <span class="mf-kicker" data-reveal="rise">Fisioterapia, Pilates e Estética em São Roque</span>
@@ -79,7 +87,8 @@
         </div>
         <div class="mf-hero-media" data-reveal="scale">
           <span class="mf-hero-orbit" aria-hidden="true"></span>
-          <img class="mf-hero-photo" src="assets/images/equipe-01.jpg" alt="Equipe da Modo Fisio em atendimento" loading="eager" width="480" height="600">
+          <img class="mf-hero-photo" src="assets/images/modofisio_2025_043.JPG" alt="Equipe da Modo Fisio em atendimento" loading="eager" width="480" height="600">
+          <canvas class="mf-hero-particles" aria-hidden="true"></canvas>
           <span class="mf-hero-badge"><b>São Roque</b>/SP</span>
         </div>
       </div>

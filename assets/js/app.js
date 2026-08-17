@@ -35,6 +35,8 @@
     var toTop = document.querySelector(".mf-scroll-top");
     var fab = document.querySelector(".fab-wa");
     var navLinks = Array.prototype.slice.call(document.querySelectorAll('.mf-nav a[href^="#"]'));
+    var spine = document.querySelector(".mf-hero-spine");
+    var hero = document.querySelector(".mf-hero");
     var sections = navLinks
       .map(function (a) { return document.querySelector(a.getAttribute("href")); })
       .filter(Boolean);
@@ -46,6 +48,10 @@
       var p = h > 0 ? sy / h : 0;
       root.style.setProperty("--mf-scroll-progress", Math.min(1, Math.max(0, p)).toFixed(4));
       if (header) header.classList.toggle("is-scrolled", sy > 14);
+      /* parallax sutil da coluna (25% da velocidade, só com a hero visível) */
+      if (spine && hero && !prefersReduced && sy < hero.offsetHeight) {
+        spine.style.transform = "translate3d(0," + (sy * 0.25).toFixed(1) + "px,0)";
+      }
       if (toTop) {
         var show = sy > 600;
         toTop.classList.toggle("is-visible", show);
@@ -123,11 +129,71 @@
     io.observe(wall);
   }
 
+  /* ---------- Partículas azuladas sutis na foto da hero (hover) ---------- */
+  function setupHeroParticles() {
+    var media = document.querySelector(".mf-hero-media");
+    var canvas = document.querySelector(".mf-hero-particles");
+    if (!media || !canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext("2d");
+    var particles = [];
+    var running = false;
+
+    function resize() {
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
+    }
+    function spawnOne() {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: canvas.height + 10,
+        r: 0.8 + Math.random() * 1.8,
+        v: 0.15 + Math.random() * 0.35,
+        drift: (Math.random() - 0.5) * 0.25,
+        a: 0.12 + Math.random() * 0.3,
+        hue: 208 + Math.random() * 18
+      });
+    }
+    function tick() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (var i = particles.length - 1; i >= 0; i--) {
+        var p = particles[i];
+        p.y -= p.v;
+        p.x += p.drift;
+        if (p.y < -8) { particles.splice(i, 1); continue; }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, 6.2832);
+        ctx.fillStyle = "hsla(" + p.hue + ",62%,68%," + p.a + ")";
+        ctx.fill();
+      }
+      if (particles.length < 22 && Math.random() < 0.3) spawnOne();
+      if (running) requestAnimationFrame(tick);
+    }
+    function start() {
+      if (prefersReduced || running) return;
+      running = true;
+      resize();
+      for (var i = 0; i < 22; i++) {
+        spawnOne();
+        particles[i].y = Math.random() * canvas.height; /* dispersa a primeira leva */
+      }
+      requestAnimationFrame(tick);
+    }
+    function stop() {
+      running = false;
+      particles = [];
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    media.addEventListener("mouseenter", start);
+    media.addEventListener("mouseleave", stop);
+    window.addEventListener("resize", function () { if (running) resize(); }, { passive: true });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     setupReveal();
     setupScroll();
     setupAnchors();
     setupMenu();
     setupMarquee();
+    setupHeroParticles();
   });
 })();
