@@ -165,18 +165,20 @@ em{font-style:italic}
 }
 .mf-header.is-scrolled{padding:10px 0}
 .mf-header-inner{
-  position:relative;min-height:78px;
+  position:relative;overflow:hidden;min-height:78px;
   display:flex;align-items:center;gap:30px;
   border:1px solid transparent;border-radius:18px;
-  transition:background var(--t-ui),box-shadow var(--t-ui),border-color var(--t-ui);
+  transition:box-shadow var(--t-ui);
 }
+/* sombra externa na pílula (a do ::before seria cortada pelo overflow) */
+.mf-header.is-scrolled .mf-header-inner{box-shadow:0 18px 44px -20px rgba(2,51,132,.35)}
 /* vidro em camada ::before: não cria bloco de contenção pro menu mobile (fixed) */
 .mf-header.is-scrolled .mf-header-inner::before{
   content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;pointer-events:none;
   background:rgba(255,255,255,.72);
   backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);
   border:1px solid rgba(255,255,255,.65);
-  box-shadow:0 18px 44px -20px rgba(2,51,132,.35),inset 0 1px 0 rgba(255,255,255,.85);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
 }
 .mf-brand{display:flex;align-items:center;gap:13px;color:var(--mf-blue)}
 /* no topo, a marca ganha pílula de vidro própria (igual ao protótipo) */
@@ -208,8 +210,8 @@ em{font-style:italic}
 .mf-nav a.is-active{background:rgba(255,255,255,.85);box-shadow:inset 0 1px 0 #fff,0 4px 12px -6px rgba(2,51,132,.25)}
 .mf-header-action{margin-left:8px;flex:0 0 auto}
 .mf-header-action.mf-button--primary{box-shadow:none}
-/* contêiner recortado na curva da ilha; preenchimento pelo <i> interno (direita→esquerda) */
-.mf-scroll-progress{position:absolute;left:0;right:0;bottom:0;height:3px;border-radius:0 0 18px 18px;overflow:hidden;z-index:2;opacity:0;transition:opacity var(--t-ui)}
+/* faixa reta: quem curva nas pontas é o overflow da própria ilha */
+.mf-scroll-progress{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:2;opacity:0;transition:opacity var(--t-ui)}
 .mf-header.is-scrolled .mf-scroll-progress{opacity:1}
 .mf-scroll-progress i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--mf-blue-mid),var(--mf-accent) 55%,#5ad6c9);transform:translateX(calc((1 - var(--mf-scroll-progress,0))*100%));transition:transform .18s linear;will-change:transform}
 
