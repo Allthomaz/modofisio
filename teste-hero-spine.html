@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teste — Hero com coluna + vidro fino | Modo Fisio</title>
+<style>
+/* ============================================================
+   TESTE ISOLADO 3 — hero original como base,
+   coluna colorida de fundo + véu de vidro fino + ilha
+   ============================================================ */
+@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:500;font-display:swap;src:url("assets/fonts/pjs-500-latin.woff2") format("woff2")}
+@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:700;font-display:swap;src:url("assets/fonts/pjs-700-latin.woff2") format("woff2")}
+@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:800;font-display:swap;src:url("assets/fonts/pjs-800-latin.woff2") format("woff2")}
+
+:root{
+  --blue:#023384; --blue-mid:#2456c4; --blue-deep:#011a4f;
+  --accent:#1fa89a; --accent-deep:#157f74; --accent-soft:#e3f4f1;    /* verde-água da marca — igual ao index */
+  --silver:#AEB8C9; --silver-deep:#66738C; --silver-glow:rgba(197,205,220,.85); /* prata platinado */
+  --accent-text:#0E5F6B; /* petróleo — destaques de texto */
+  --ink:#0c1a3a; --copy:#3a4a66; --muted:#6b7a92;
+  --paper:#ffffff; --cool:#f4f7fb; --line:#dde4ef;
+  --font:"Plus Jakarta Sans",system-ui,sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --glass-bg:rgba(255,255,255,.55);
+  --glass-bg-strong:rgba(255,255,255,.72);
+  --glass-border:rgba(255,255,255,.65);
+  --glass-blur:saturate(180%) blur(18px);
+  --glass-shadow:0 18px 44px -20px rgba(2,51,132,.35), inset 0 1px 0 rgba(255,255,255,.85);
+  --glass-shadow-float:0 28px 60px -24px rgba(2,51,132,.45), inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+*{margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);color:var(--copy);background:var(--cool);line-height:1.62;font-size:16.5px;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+button{font:inherit;cursor:pointer;border:0;background:none}
+
+/* ============ HEADER (ilha aprovada) ============ */
+.header{position:fixed;inset:0 0 auto 0;z-index:100;padding:14px 0;transition:padding .4s var(--ease)}
+.header-inner{
+  position:relative;max-width:1180px;margin:0 auto;padding:10px 22px;
+  display:flex;align-items:center;gap:28px;border-radius:18px;
+  background:transparent;overflow:hidden;border:1px solid transparent;
+  transition:background .45s var(--ease),box-shadow .45s var(--ease),border-color .45s var(--ease);
+}
+.header.scrolled .header-inner{
+  background:var(--glass-bg);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+  border-color:var(--glass-border);box-shadow:var(--glass-shadow);
+}
+.header.scrolled{padding:10px 0}
+.header-progress{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.18);opacity:0;transition:opacity .45s var(--ease)}
+.header.scrolled .header-progress{opacity:1}
+.header-progress i{
+  display:block;height:100%;width:100%;
+  background:linear-gradient(270deg,var(--accent),#5ad6c9);
+  transform:translateX(100%);transform-origin:right center;transition:transform .18s linear;
+}
+.brand{display:flex;align-items:center;gap:14px;font-weight:800;color:var(--ink);border:1px solid transparent;border-radius:16px;transition:background .45s var(--ease),box-shadow .45s var(--ease),padding .45s var(--ease)}
+/* sobre a hero, a marca ganha mini-pílula de vidro própria (fundo é claro) */
+.hero-at-top .brand{
+  background:var(--glass-bg-strong);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+  border:1px solid var(--glass-border);border-radius:16px;
+  padding:8px 16px 8px 8px;
+}
+.brand-mark{
+  position:relative;width:54px;height:54px;flex:0 0 auto;
+  border-radius:14px;overflow:hidden;
+  animation:breath 4.2s var(--ease) infinite;
+  transition:width .45s var(--ease),height .45s var(--ease),border-radius .45s var(--ease);
+}
+.brand-mark img{width:100%;height:100%;object-fit:cover}
+.brand-mark::after{
+  content:"";position:absolute;inset:-40% auto -40% -90%;width:55%;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:skewX(-18deg);animation:shine 5.5s var(--ease) infinite;animation-delay:1.2s;
+}
+.brand-mark::before{
+  content:"";position:absolute;inset:-6px;border-radius:18px;z-index:-1;
+  background:radial-gradient(closest-side,rgba(31,168,154,.4),transparent 72%);
+  animation:halo 4.2s var(--ease) infinite;
+}
+.brand-name{display:flex;flex-direction:column;line-height:1}
+.brand-name b{font-size:21px;letter-spacing:.2px;white-space:nowrap;transition:font-size .45s var(--ease),color .45s var(--ease)}
+.brand-name small{
+  font-weight:500;font-size:10px;letter-spacing:2.4px;text-transform:uppercase;
+  margin-top:4px;white-space:nowrap;color:var(--muted);transition:font-size .45s var(--ease);
+}
+.header.scrolled .brand-mark{width:42px;height:42px;border-radius:11px}
+.header.scrolled .brand-name b{font-size:16.5px}
+.header.scrolled .brand-name small{font-size:9px;letter-spacing:2px}
+/* pílula some quando a ilha do header assume */
+.header.scrolled .brand{background:none;border-color:transparent;box-shadow:none;padding:0}
+
+.nav{display:flex;gap:6px;margin-left:auto}
+.nav a{padding:9px 15px;border-radius:10px;font-weight:500;font-size:14.5px;color:var(--copy);transition:color .3s,background .3s}
+.nav a:hover{color:var(--ink);background:rgba(255,255,255,.55)}
+.nav a.active{color:var(--ink);background:rgba(255,255,255,.85);box-shadow:inset 0 1px 0 #fff,0 4px 12px -6px rgba(2,51,132,.25)}
+.cta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--accent);color:#02142e;font-weight:700;font-size:14px;
+  padding:11px 20px;border-radius:11px;
+  box-shadow:none;
+  transition:transform .3s var(--ease),box-shadow .3s,background .3s;
+}
+.cta{color:#02142e}
+.cta:hover{background:var(--accent-deep);color:#fff;transform:translateY(-2px)}
+.cta svg{width:15px;height:15px}
+
+/* ============ HERO — coluna de fundo + véu fino + ilha ============ */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:150px 22px 110px;overflow:hidden}
+
+/* camada 1: a coluna (parallax sutil) */
+.hero-spine{position:absolute;inset:-6% 0;z-index:-3;will-change:transform}
+.hero-spine img{width:100%;height:100%;object-fit:cover;object-position:center}
+
+/* véu com reforço à esquerda (onde entra o texto, sem card atrás) */
+.hero-veil{
+  position:absolute;inset:0;z-index:-2;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.62),rgba(255,255,255,.34) 46%,rgba(255,255,255,.30) 100%),
+    linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.38) 72%,var(--cool) 100%);
+  -webkit-backdrop-filter:saturate(140%) blur(2.5px);
+  backdrop-filter:saturate(140%) blur(2.5px);
+}
+/* vinheta suave nas bordas pra focar o centro */
+.hero-veil::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(120% 90% at 50% 40%,transparent 55%,rgba(244,247,251,.55) 100%);
+}
+
+/* ---- brilho azulado suave seguindo o mouse no fundo do hero ---- */
+/* conteúdo */
+.hero-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;width:100%}
+
+/* ILHA: só o header — na hero, conteúdo direto sobre o véu (institucional) */
+.hero-copy{position:relative}
+.kicker{
+  display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;
+  color:var(--accent-deep);border:1px solid rgba(31,168,154,.4);border-radius:999px;
+  padding:7px 15px;margin-bottom:20px;background:rgba(255,255,255,.5);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+}
+.hero-copy h1{color:var(--ink);font-size:clamp(30px,4vw,44px);font-weight:800;line-height:1.14;letter-spacing:-.8px;margin-bottom:16px}
+.hero-copy h1 em{font-style:normal;color:var(--accent)}
+.hero-copy p{max-width:52ch;margin-bottom:26px}
+.hero-copy .actions{display:flex;gap:14px;flex-wrap:wrap}
+.cta{color:#fff}
+/* secundário igual ao site: fundo branco, texto/borda azul */
+.cta--ghost{background:var(--paper);color:var(--blue);border:1px solid var(--blue);box-shadow:none}
+.cta--ghost:hover{background:#e9eefb;border-color:var(--blue);transform:translateY(-2px)}
+.hero-copy .support{display:flex;gap:18px;flex-wrap:wrap;margin-top:26px;font-size:13px;color:var(--muted)}
+.hero-copy .support span{display:inline-flex;align-items:center;gap:7px}
+.hero-copy .support svg{width:14px;height:14px;color:var(--accent-deep)}
+
+/* foto institucional: sem moldura de vidro */
+.hero-photo{position:relative;overflow:hidden;border-radius:22px}
+.hero-photo img{
+  width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center;
+  box-shadow:0 30px 60px -28px rgba(12,26,58,.45);
+  transition:transform .6s var(--ease-out);
+}
+.hero-photo:hover img{transform:scale(1.015)}
+/* partículas azuladas sutis (canvas sobre a foto) */
+.hero-photo canvas{
+  position:absolute;inset:0;width:100%;height:100%;
+  border-radius:22px;pointer-events:none;opacity:0;transition:opacity .6s var(--ease);
+}
+.hero-photo:hover canvas{opacity:1}
+.hero-photo .photo-badge{
+  position:absolute;bottom:18px;left:18px;
+  background:linear-gradient(135deg,rgba(244,247,251,.88),rgba(233,238,251,.78));
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border:1px solid rgba(174,184,201,.55);border-radius:999px;
+  padding:8px 16px;font-size:13px;font-weight:700;color:var(--ink);
+  box-shadow:0 10px 24px -12px rgba(12,26,58,.4),inset 0 1px 0 #fff;
+}
+.hero-photo .photo-badge b{color:var(--blue)}
+
+/* selo flutuante sobre a hero */
+.hero-badge{  position:absolute;top:24%;right:6%;z-index:5;
+  background:var(--glass-bg-strong);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+  border:1px solid var(--glass-border);border-radius:999px;
+  box-shadow:var(--glass-shadow);
+  padding:10px 20px;font-size:13.5px;font-weight:700;color:var(--ink);
+}
+.hero-badge b{color:var(--accent-text)}
+
+/* ============ SEÇÃO SEGUINTE (transição) ============ */
+.section{max-width:1180px;margin:0 auto;padding:80px 22px}
+.section h2{color:var(--ink);font-size:30px;font-weight:800;letter-spacing:-.5px;margin-bottom:10px;text-align:center}
+.section > p{text-align:center;color:var(--muted);max-width:56ch;margin:0 auto}
+
+.hint{
+  position:fixed;bottom:20px;right:20px;z-index:80;
+  background:var(--ink);color:rgba(255,255,255,.85);font-size:12.5px;
+  padding:10px 16px;border-radius:10px;box-shadow:0 14px 30px -14px rgba(12,26,58,.6);
+}
+
+/* ============ ANIMAÇÕES ============ */
+@keyframes breath{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+@keyframes shine{0%{left:-90%}18%,100%{left:160%}}
+@keyframes halo{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+/* ============ MOBILE ============ */
+@media (max-width:900px){
+  .header .cta{display:none}
+  .nav{display:none}
+  .hero{padding:120px 16px 70px}
+  .hero-grid{grid-template-columns:1fr;gap:30px}
+  .hero-copy{padding:0 4px}
+  .hero-photo{max-width:420px;margin:0 auto}
+  .hero-badge{top:auto;bottom:14%;right:12px}
+  .section{padding:56px 16px}
+}
+
+/* ============ MOVIMENTO REDUZIDO ============ */
+@media (prefers-reduced-motion:reduce){
+  .brand-mark,.brand-mark::after,.brand-mark::before,.glass-hero{animation:none}
+  .hero-spine{transform:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header class="header" id="header">
+  <div class="header-inner">
+    <a class="brand" href="#top" aria-label="Modo Fisio — início">
+      <span class="brand-mark"><img src="assets/images/modofisio_2025_001.JPG" alt="" style="object-position:center 38%"></span>
+      <span class="brand-name"><b>Modo Fisio</b><small>Fisioterapia &amp; Pilates</small></span>
+    </a>
+    <nav class="nav" aria-label="Navegação principal">
+      <a href="#cuidados" class="active">Cuidados</a>
+      <a href="#cuidados">Benefícios</a>
+      <a href="#cuidados">Equipe</a>
+      <a href="#cuidados">Localização</a>
+    </nav>
+    <a class="cta" href="https://wa.me/5511974071234" target="_blank" rel="noopener">
+      Agendar avaliação
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <span class="header-progress" aria-hidden="true"><i id="headerBar"></i></span>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" id="hero">
+    <div class="hero-spine" aria-hidden="true">
+      <img src="assets/images/Human_spine_graphic_design_layout_202608171628.jpeg" alt="">
+    </div>
+    <div class="hero-veil" aria-hidden="true"></div>
+
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="kicker">Fisioterapia, Pilates e Estética em São Roque</span>
+        <h1>Seu corpo pede <em>cuidado</em> antes de pedir que você pare.</h1>
+        <p>Dor ao se movimentar, perda de força, insegurança depois de uma lesão ou o desejo de voltar a se sentir bem no próprio corpo não precisam ser ignorados. Na <strong>Modo Fisio</strong>, cada cuidado começa entendendo você.</p>
+        <div class="actions">
+          <a class="cta" href="https://wa.me/5511974071234" target="_blank" rel="noopener">Agendar minha avaliação</a>
+          <a class="cta cta--ghost" href="#cuidados">Conhecer os cuidados</a>
+        </div>
+        <div class="support">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Atendimento personalizado</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Equipe atenciosa</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Cuidado em cada etapa</span>
+        </div>
+      </div>
+
+      <div class="hero-photo">
+        <img src="assets/images/modofisio_2025_043.JPG" alt="Equipe da Modo Fisio em atendimento">
+        <canvas aria-hidden="true"></canvas>
+        <span class="photo-badge"><b>São Roque</b>/SP</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="cuidados">
+    <h2>Transição pro restante do site</h2>
+    <p>Ao rolar, repare: a coluna desce num parallax sutil (mais devagar que o conteúdo) e o véu se funde com o fundo claro da página. O header vira ilha de vidro com a linha de progresso.</p>
+    <p style="margin-top:10px">Texto de preenchimento para dar altura de rolagem suficiente ao teste. Desça e volte ao topo para sentir o parallax e a mudança de estado do header.</p>
+    <p style="margin-top:10px">Mais preenchimento. A coluna permanece visível durante praticamente toda a descida da hero, saindo de cena suavemente pelo degradê na base.</p>
+  </section>
+</main>
+
+<div class="hint">Teste isolado 3 — hero com coluna</div>
+
+<script>
+(function(){
+  var header = document.getElementById('header');
+  var bar = document.getElementById('headerBar');
+  var hero = document.getElementById('hero');
+  var spine = document.querySelector('.hero-spine');
+  var ticking = false;
+
+  function onScroll(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      var y = window.scrollY;
+      var scrolled = y > 30;
+      header.classList.toggle('scrolled', scrolled);
+      // enquanto a hero ocupa a tela, texto do header segue claro
+      header.classList.toggle('hero-at-top', !scrolled);
+      var h = document.documentElement;
+      var p = Math.min(1, h.scrollTop / (h.scrollHeight - h.clientHeight));
+      bar.style.transform = 'translateX(' + ((1 - p) * 100) + '%)';
+      // parallax sutil da coluna (~25% da velocidade, só enquanto a hero está visível)
+      if(y < hero.offsetHeight && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+        spine.style.transform = 'translateY(' + (y * .25) + 'px)';
+      }
+      ticking = false;
+    });
+  }
+  document.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  // partículas azuladas sutis na foto (hover)
+  (function(){
+    var box = document.querySelector('.hero-photo');
+    var canvas = box.querySelector('canvas');
+    var ctx = canvas.getContext('2d');
+    var particles = [];
+    var running = false;
+    var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function resize(){
+      canvas.width = box.clientWidth;
+      canvas.height = box.clientHeight;
+    }
+    function spawn(){
+      var n = 22;
+      for(var i = 0; i < n; i++){
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: canvas.height + Math.random() * 40,
+          r: .8 + Math.random() * 1.8,
+          v: .15 + Math.random() * .35,
+          drift: (Math.random() - .5) * .25,
+          a: .12 + Math.random() * .3,
+          hue: 208 + Math.random() * 18
+        });
+      }
+    }
+    function tick(){
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for(var i = particles.length - 1; i >= 0; i--){
+        var p = particles[i];
+        p.y -= p.v;
+        p.x += p.drift;
+        if(p.y < -8){ particles.splice(i, 1); continue; }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, 6.2832);
+        ctx.fillStyle = 'hsla(' + p.hue + ',62%,68%,' + p.a + ')';
+        ctx.fill();
+      }
+      if(particles.length < 22 && Math.random() < .3){
+        particles.push({
+          x: Math.random() * canvas.width, y: canvas.height + 10,
+          r: .8 + Math.random() * 1.8, v: .15 + Math.random() * .35,
+          drift: (Math.random() - .5) * .25, a: .12 + Math.random() * .3,
+          hue: 208 + Math.random() * 18
+        });
+      }
+      if(running) requestAnimationFrame(tick);
+    }
+    function start(){
+      if(reduced || running) return;
+      running = true;
+      resize();
+      spawn();
+      requestAnimationFrame(tick);
+    }
+    function stop(){
+      running = false;
+      particles = [];
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    box.addEventListener('mouseenter', start);
+    box.addEventListener('mouseleave', stop);
+    window.addEventListener('resize', function(){ if(running) resize(); }, { passive:true });
+  })();
+})();
+</script>
+</body>
+</html>

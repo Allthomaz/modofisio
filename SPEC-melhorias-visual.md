@@ -1,71 +1,96 @@
 # Spec — Melhorias visuais (Modo Fisio)
 
 Direções aprovadas em testes isolados para futura aplicação no site.
-Protótipos: `teste-sidebar-logo.html` (sidebar) e `teste-liquid-glass.html`
-(header/hero — **versão de referência aprovada**). Nenhum arquivo do site foi alterado.
+Protótipos: `teste-liquid-glass.html` (header ilha v1), `teste-sidebar-logo.html`
+(sidebar — não adotada) e `teste-hero-spine.html` (**versão de referência final**).
+Nenhum arquivo do site foi alterado.
+
+## 0. Decisões de paleta (fechadas)
+
+- **Paleta do site original mantida** (index.html): azul `#023384` +
+  verde-água `#1FA89A` (CTA) + `#157F74` (hover). NÃO adotar terracota,
+  dourado, prata ou verde esmeralda — testados e descartados ("brigavam" com
+  a marca / destoavam do fundo).
+- Botão secundário igual ao site: fundo branco, texto/borda azul.
+- Evitar brilho quente (âmbar/cobre) sobre a hero — destoa da paleta fria.
 
 ## 1. Header — ilha flutuante de vidro (aprovado)
 
-**Nomes do padrão:** glassmorphism (efeito vidro) + floating pill header / ilha flutuante
-(container arredondado que "flutua" sobre o conteúdo, estilo Dynamic Island).
+**Nomes do padrão:** glassmorphism (efeito vidro) + floating pill header /
+ilha flutuante (estilo Dynamic Island).
 
-Comportamento:
-
-- No topo da página o header fica **transparente** (como no site atual).
-- Ao rolar (>30px), o header vira uma **ilha de vidro**: pílula arredondada (18px)
-  com `backdrop-filter: saturate(180%) blur(18px)`, fundo translúcido branco,
-  borda clara e sombra interna de brilho (`inset 0 1px 0 rgba(255,255,255,.85)`).
-- Transições suaves (~.45s, easing `cubic-bezier(.22,.61,.36,1)`).
+- No topo o header fica transparente; ao rolar (>30px) vira ilha de vidro:
+  pílula 18px, `backdrop-filter: saturate(180%) blur(18px)`, fundo
+  translúcido branco, borda clara, brilho interno.
+- **Sombras:** CTA, pílula da marca e foto da marca SEM sombra (removidas a
+  pedido). A sombra da ilha do header foi mantida.
+- Mobile: drawer de vidro, CTA sai do header.
 
 ## 2. Linha de progresso na ilha (aprovado)
 
-- Linha de 3px na borda inferior da ilha, aparece junto com o modo vidro.
-- Preenche **da direita para a esquerda** conforme o scroll (gradiente
-  verde-água `--accent` → `#5ad6c9`).
-- **Solução da curva:** a barra fica DENTRO da ilha com `overflow:hidden` no
-  container — o próprio arredondamento recorta a linha na curva. Não usar
-  `border-radius` na barra (não acompanha a curvatura real).
+- Linha 3px na borda inferior, preenche **da direita para a esquerda**,
+  gradiente verde-água (`--accent` → `#5ad6c9`), acompanha o scroll.
+- **Solução da curva:** barra DENTRO da ilha + `overflow:hidden` no
+  container — o arredondamento recorta a linha na curva. Não usar
+  `border-radius` na própria barra.
 
 ## 3. Logo animada (aprovado)
 
-- Símbolo (`logo-mark-160.jpg`) + wordmark tipográfico ao lado (a logo PNG
-  completa tem texto embutido — não usar com wordmark do lado, duplica).
-- Efeitos no símbolo: **respiração** (escala 1→1.035, ciclo 4.2s), **shine**
-  (brilho percorrendo a cada 5.5s), **halo** verde-água pulsando atrás.
-- Dois estados: **topo** = símbolo 54px + nome 21px + tagline "FISIOTERAPIA &
-  PILATES" em caixa alta espaçada; **rolado** = compacta (42px / 16.5px),
-  encolhendo animado junto com a ilha.
+- Efeitos no símbolo: **respiração** (escala 1→1.035, 4.2s), **shine**
+  (brilho percorrendo, 5.5s), **halo** verde-água pulsando atrás.
+- Dois estados: **topo** = símbolo 54px + nome 21px + tagline "FISIOTERAPIA
+  & PILATES"; **rolado** = compacta (42px / 16.5px), encolhendo animado.
+- **Última decisão:** a marca do teste usa foto da fachada
+  (`modofisio_2025_001.JPG`, `object-position:center 38%`) — avaliar se vira
+  recorte do letreiro ou volta ao símbolo oficial (`logo-mark-160.jpg`).
+- A logo PNG completa tem texto embutido — não usar com wordmark ao lado.
 
-## 4. Hero — brilho acolhedor seguindo o mouse (aprovado)
+## 4. Hero — coluna colorida de fundo (aprovado)
 
-- Radial gradient quente (âmbar ~`rgba(255,196,128,.28)`, ~420px) posicionado
-  via variáveis CSS `--mx/--my` atualizadas em `mousemove` (leve, sem blur).
-- Surge/desaparece com fade (~.8s) ao entrar/sair do hero.
+Layout **institucional** (igual ao site original), SEM cards flutuantes:
 
-## 5. Ilhas liquid glass no conteúdo (aprovado com ressalvas)
+- **Fundo:** imagem da coluna (`Human_spine_graphic_design_layout_*.jpeg`)
+  cobrindo toda a hero, coluna central atrás do conteúdo.
+- **Véu de vidro fino:** filme translúcido (blur só 2.5px + degradê branco)
+  com reforço à esquerda (onde entra o texto) e fundição pro `--mf-cool` na
+  base. A coluna permanece visível.
+- **Parallax sutil** da coluna (25% da velocidade do scroll), só enquanto a
+  hero está visível.
+- **Texto direto sobre o véu** (sem ilha de vidro). Kicker em pílula com
+  borda verde-água fina.
+- **Foto da equipe:** `modofisio_2025_043.JPG`, moldura limpa (raio 22px),
+  selo "São Roque/SP" em pílula neutra fria, sem moldura de vidro.
+  Fotos testadas: _033 (substituída), _043 (atual).
+- **Hover da foto:** zoom mínimo (scale 1.015) + **partículas azuladas
+  sutis** (canvas, ~22 partículas, matiz 208-226, 0.8-2.6px) que sobem
+  lentamente; só animam com mouse sobre a foto; desativadas com
+  `prefers-reduced-motion`.
+- **Brilho que seguia o mouse pela hero: REMOVIDO** (testado em âmbar e
+  azul; rejeitado).
+- Animação "polaroid" (inclinar/endireitar) da foto: **rejeitada**.
 
-- Cards de vidro (mesmos tokens da ilha) exigem **cor/imagem atrás** para
-  aparecer — sobre fundo branco liso o efeito não existe.
-- Hero demo usa foto de fundo + blobs coloridos desfocados em movimento lento
-  + card de vidro principal flutuando + foto em moldura de vidro (polaroid).
-- Ressalva de performance: limitar quantidade de ilhas com `backdrop-filter`
-  (custo em celulares fracos).
+## 5. Ilhas liquid glass no conteúdo (padrão aprovado, uso futuro)
+
+- O modelo de ilha/card de vidro (hero v1, cards de serviços) **pode ser
+  reutilizado em outra seção** — candidata natural: seção de serviços.
+- Cards de vidro exigem **cor/imagem atrás** para aparecer.
+- Limitar quantidade de `backdrop-filter` (custo em celular fraco).
 
 ## 6. Responsividade e acessibilidade (aprovado)
 
-- Mobile: menu vira drawer de vidro (canto inferior direito), CTA sai do
-  header, hero empilha, ilhas em coluna única.
-- `prefers-reduced-motion: reduce` desliga todas as animações (logo, flutuação,
-  blobs) — obrigatório manter na implementação final.
+- Mobile: hero empilha (foto max-width 420px centrada), coluna permanece
+  centralizada (imagem paisagem corta laterais), header sem nav/CTA.
+- `prefers-reduced-motion: reduce` desliga TODAS as animações (logo,
+  partículas, parallax) — obrigatório na implementação final.
 
 ## Ideias pendentes (ainda não prototipadas)
 
-- [ ] Trocar imagens da home e da equipe (aguardando materiais da clínica).
-- [ ] Imagem da coluna colorida com efeito scroll (scrollytelling: imagem sticky
-      + highlight percorrendo cervical→torácica→lombar; no mobile, arrastar
-      indicador pela coluna revelando cards por região).
-- [ ] Avaliar GSAP ScrollTrigger caso o scroll da coluna precise de scrub suave
+- [ ] Efeito scroll percorrendo a coluna (scrollytelling: cervical→torácica→
+      lombar; no mobile, arrastar indicador revelando cards por região).
+- [ ] Avaliar GSAP ScrollTrigger se o scrub precisar ser mais suave
       (implementação atual é vanilla: IntersectionObserver + CSS).
+- [ ] Definir imagem final da marca no header (fachada x símbolo oficial).
+- [ ] Trocar demais imagens do site pelos materiais oficiais da clínica.
 
 ## Tokens liquid glass (extraír ao implementar)
 
