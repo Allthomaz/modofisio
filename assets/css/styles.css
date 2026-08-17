@@ -312,8 +312,6 @@ em{font-style:italic}
 .mf-hero-media .mf-hero-photo-box{position:relative;width:min(100%,480px)}
 .mf-hero-media .mf-hero-photo{position:relative;width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:var(--radius-lg);box-shadow:var(--shadow-card);transform:translateY(var(--hero-parallax-y,0));transition:transform .6s var(--ease-out)}
 .mf-hero-media:hover .mf-hero-photo{transform:translateY(var(--hero-parallax-y,0)) scale(1.015)}
-.mf-hero-particles{position:absolute;inset:0;width:100%;border-radius:var(--radius-lg);pointer-events:none;opacity:0;transition:opacity .6s var(--ease)}
-.mf-hero-media:hover .mf-hero-particles{opacity:1}
 .mf-hero-badge{position:absolute;bottom:18px;left:18px;z-index:3;display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,rgba(244,247,251,.88),rgba(233,238,251,.78));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--mf-blue);padding:8px 16px;border-radius:999px;border:1px solid rgba(174,184,201,.55);box-shadow:0 10px 24px -12px rgba(12,26,58,.4),inset 0 1px 0 #fff;font-weight:700;font-size:13px}
 .mf-hero-badge b{color:var(--mf-accent-deep)}
 
