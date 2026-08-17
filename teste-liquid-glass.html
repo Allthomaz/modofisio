@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teste — Liquid Glass + logo animada | Modo Fisio</title>
+<style>
+/* ============================================================
+   TESTE ISOLADO 2 — formato atual do site (header no topo)
+   + "ilhas" liquid glass + efeito da logo aprovado
+   ============================================================ */
+@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:500;font-display:swap;src:url("assets/fonts/pjs-500-latin.woff2") format("woff2")}
+@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:700;font-display:swap;src:url("assets/fonts/pjs-700-latin.woff2") format("woff2")}
+@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:800;font-display:swap;src:url("assets/fonts/pjs-800-latin.woff2") format("woff2")}
+
+:root{
+  --blue:#023384; --blue-mid:#2456c4; --blue-deep:#011a4f;
+  --accent:#1fa89a; --accent-deep:#157f74; --accent-soft:#e3f4f1;
+  --ink:#0c1a3a; --copy:#3a4a66; --muted:#6b7a92;
+  --paper:#ffffff; --cool:#f4f7fb; --line:#dde4ef;
+  --font:"Plus Jakarta Sans",system-ui,sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+
+  /* ---- tokens liquid glass ---- */
+  --glass-bg:rgba(255,255,255,.55);
+  --glass-bg-strong:rgba(255,255,255,.72);
+  --glass-border:rgba(255,255,255,.65);
+  --glass-blur:saturate(180%) blur(18px);
+  --glass-shadow:0 18px 44px -20px rgba(2,51,132,.35), inset 0 1px 0 rgba(255,255,255,.85), inset 0 -1px 0 rgba(255,255,255,.25);
+  --glass-shadow-float:0 28px 60px -24px rgba(2,51,132,.45), inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+*{margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);color:var(--copy);background:var(--cool);line-height:1.62;font-size:16.5px;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+button{font:inherit;cursor:pointer;border:0;background:none}
+
+/* ============ HEADER (formato atual + liquid glass) ============ */
+.header{
+  position:fixed;inset:0 0 auto 0;z-index:100;
+  padding:14px 0;
+  transition:padding .4s var(--ease);
+}
+/* ilha de vidro que envolve o header ao rolar */
+.header-inner{
+  position:relative;
+  max-width:1180px;margin:0 auto;padding:10px 22px;
+  display:flex;align-items:center;gap:28px;
+  border-radius:18px;
+  background:transparent;
+  overflow:hidden; /* recorta a linha de progresso na curva da ilha */
+  transition:background .45s var(--ease),box-shadow .45s var(--ease),border-color .45s var(--ease);
+  border:1px solid transparent;
+}
+.header.scrolled .header-inner{
+  background:var(--glass-bg);
+  -webkit-backdrop-filter:var(--glass-blur);
+  backdrop-filter:var(--glass-blur);
+  border-color:var(--glass-border);
+  box-shadow:var(--glass-shadow);
+}
+.header.scrolled{padding:10px 0}
+
+/* ---- linha de progresso colada na borda da ilha ---- */
+.header-progress{
+  position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:rgba(255,255,255,.18);
+  opacity:0;transition:opacity .45s var(--ease);
+}
+.header.scrolled .header-progress{opacity:1}
+.header-progress i{
+  display:block;height:100%;width:100%;
+  background:linear-gradient(270deg,var(--accent),#5ad6c9);
+  transform:translateX(100%);
+  transform-origin:right center;
+  transition:transform .18s linear;
+}
+
+/* ---- brilho acolhedor que segue o mouse no fundo do hero ---- */
+.hero-warm{
+  position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(420px circle at var(--mx,-500px) var(--my,-500px),
+    rgba(255,196,128,.28),rgba(255,158,106,.12) 40%,transparent 68%);
+  opacity:0;transition:opacity .8s var(--ease);
+}
+.hero:hover .hero-warm{opacity:1}
+
+/* ---- LOGO (efeito aprovado: respiração + shine + halo) ---- */
+.brand{display:flex;align-items:center;gap:14px;font-weight:800;color:var(--ink)}
+.brand-mark{
+  position:relative;width:54px;height:54px;flex:0 0 auto;
+  border-radius:14px;overflow:hidden;
+  box-shadow:0 10px 24px -8px rgba(1,26,79,.5),0 0 0 1px rgba(255,255,255,.5);
+  animation:breath 4.2s var(--ease) infinite;
+  transition:width .45s var(--ease),height .45s var(--ease),border-radius .45s var(--ease);
+}
+.brand-mark img{width:100%;height:100%;object-fit:cover}
+.brand-mark::after{
+  content:"";position:absolute;inset:-40% auto -40% -90%;width:55%;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:skewX(-18deg);
+  animation:shine 5.5s var(--ease) infinite;animation-delay:1.2s;
+}
+.brand-mark::before{
+  content:"";position:absolute;inset:-6px;border-radius:18px;z-index:-1;
+  background:radial-gradient(closest-side,rgba(31,168,154,.4),transparent 72%);
+  animation:halo 4.2s var(--ease) infinite;
+}
+.brand-name{display:flex;flex-direction:column;line-height:1}
+.brand-name b{
+  font-size:21px;letter-spacing:.2px;white-space:nowrap;
+  transition:font-size .45s var(--ease);
+}
+.brand-name small{
+  font-weight:500;font-size:10px;letter-spacing:2.4px;text-transform:uppercase;
+  color:var(--muted);margin-top:4px;white-space:nowrap;
+  transition:opacity .35s var(--ease),font-size .45s var(--ease);
+}
+/* no modo ilha (rolado), a logo compacta */
+.header.scrolled .brand-mark{width:42px;height:42px;border-radius:11px}
+.header.scrolled .brand-name b{font-size:16.5px}
+.header.scrolled .brand-name small{font-size:9px;letter-spacing:2px}
+
+.nav{display:flex;gap:6px;margin-left:auto}
+.nav a{
+  padding:9px 15px;border-radius:10px;font-weight:500;font-size:14.5px;color:var(--copy);
+  transition:color .3s,background .3s;
+}
+.nav a:hover{color:var(--ink);background:rgba(255,255,255,.55)}
+.nav a.active{color:var(--ink);background:rgba(255,255,255,.85);box-shadow:inset 0 1px 0 #fff,0 4px 12px -6px rgba(2,51,132,.25)}
+
+/* CTA em vidro verde */
+.cta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--accent);color:#02142e;font-weight:700;font-size:14px;
+  padding:11px 20px;border-radius:11px;
+  box-shadow:0 12px 26px -12px rgba(31,168,154,.7),inset 0 1px 0 rgba(255,255,255,.4);
+  transition:transform .3s var(--ease),box-shadow .3s,background .3s;
+}
+.cta:hover{background:#23c2b3;transform:translateY(-2px);box-shadow:0 16px 32px -12px rgba(31,168,154,.85)}
+.cta svg{width:15px;height:15px}
+
+.burger{display:none;width:44px;height:44px;border-radius:11px;padding:12px;border:1px solid var(--line)}
+.burger span{display:block;height:2px;background:var(--blue);border-radius:2px;transition:all .35s var(--ease)}
+.burger span+span{margin-top:6px}
+body.menu-open .burger span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+body.menu-open .burger span:nth-child(2){opacity:0}
+body.menu-open .burger span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+
+/* ============ HERO com fundo fotográfico (onde o vidro brilha) ============ */
+.hero{position:relative;min-height:92vh;display:flex;align-items:center;padding:140px 22px 90px}
+.hero-bg{position:absolute;inset:0;z-index:-2}
+.hero-bg img{width:100%;height:100%;object-fit:cover}
+.hero-bg::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(1,15,51,.42),rgba(1,15,51,.25) 45%,var(--cool) 98%);
+}
+/* blobs suaves atrás das ilhas */
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;z-index:-1;pointer-events:none}
+.blob-a{width:480px;height:480px;background:#9fd8d2;top:-8%;left:-6%;animation:drift 14s var(--ease) infinite alternate}
+.blob-b{width:420px;height:420px;background:#a9c0f0;bottom:-4%;right:-4%;animation:drift 17s var(--ease) infinite alternate-reverse}
+
+.hero-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;width:100%}
+
+/* ---- ILHA 1: card de vidro principal ---- */
+.glass-hero{
+  background:var(--glass-bg-strong);
+  -webkit-backdrop-filter:var(--glass-blur);
+  backdrop-filter:var(--glass-blur);
+  border:1px solid var(--glass-border);
+  border-radius:26px;
+  box-shadow:var(--glass-shadow-float);
+  padding:44px 46px;
+  animation:floaty 7s var(--ease) infinite;
+  position:relative;
+}
+.kicker{
+  display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;
+  color:var(--accent-deep);background:rgba(255,255,255,.6);
+  border:1px solid rgba(255,255,255,.75);border-radius:999px;padding:7px 15px;margin-bottom:20px;
+}
+.glass-hero h1{color:var(--ink);font-size:clamp(30px,4vw,44px);font-weight:800;line-height:1.14;letter-spacing:-.8px;margin-bottom:16px}
+.glass-hero h1 em{font-style:normal;color:var(--accent-deep)}
+.glass-hero p{max-width:52ch;margin-bottom:26px}
+.actions{display:flex;gap:14px;flex-wrap:wrap}
+.cta--ghost{
+  background:rgba(255,255,255,.55);color:var(--ink);border:1px solid rgba(255,255,255,.8);
+  box-shadow:inset 0 1px 0 #fff;
+}
+.cta--ghost:hover{background:rgba(255,255,255,.85)}
+
+/* ---- ILHA 2: foto em moldura de vidro ---- */
+.glass-photo{
+  position:relative;border-radius:26px;padding:12px;
+  background:var(--glass-bg);
+  -webkit-backdrop-filter:var(--glass-blur);
+  backdrop-filter:var(--glass-blur);
+  border:1px solid var(--glass-border);
+  box-shadow:var(--glass-shadow-float);
+  transform:rotate(2deg);
+  transition:transform .5s var(--ease-out);
+}
+.glass-photo:hover{transform:rotate(0deg) scale(1.02)}
+.glass-photo img{border-radius:16px;aspect-ratio:4/5;object-fit:cover;width:100%}
+.glass-photo figcaption{
+  position:absolute;bottom:24px;left:24px;right:24px;
+  background:rgba(255,255,255,.65);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.8);border-radius:14px;
+  padding:12px 16px;color:var(--ink);font-weight:700;font-size:14px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.glass-photo figcaption small{font-weight:500;color:var(--muted)}
+
+/* ============ SEÇÃO DE ILHAS ============ */
+.section{max-width:1180px;margin:0 auto;padding:90px 22px}
+.section-title{text-align:center;margin-bottom:52px}
+.section-title h2{color:var(--ink);font-size:32px;font-weight:800;letter-spacing:-.5px}
+.section-title p{color:var(--muted);margin-top:8px}
+.islands{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.island{
+  background:var(--glass-bg);
+  -webkit-backdrop-filter:var(--glass-blur);
+  backdrop-filter:var(--glass-blur);
+  border:1px solid var(--glass-border);
+  border-radius:20px;box-shadow:var(--glass-shadow);
+  padding:30px 28px;
+  transition:transform .45s var(--ease-out),box-shadow .45s var(--ease-out);
+}
+.island:hover{transform:translateY(-6px);box-shadow:var(--glass-shadow-float)}
+.island-icon{
+  width:48px;height:48px;border-radius:14px;display:grid;place-items:center;margin-bottom:18px;
+  background:linear-gradient(145deg,#ffffff,rgba(255,255,255,.4));
+  border:1px solid rgba(255,255,255,.9);box-shadow:inset 0 1px 0 #fff,0 8px 18px -10px rgba(2,51,132,.35);
+  color:var(--accent-deep);
+}
+.island-icon svg{width:22px;height:22px}
+.island h3{color:var(--ink);font-size:18.5px;font-weight:700;margin-bottom:8px}
+.island p{font-size:14.8px}
+
+/* faixa colorida de fundo pra evidenciar o vidro na seção */
+.tinted{position:relative}
+.tinted::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:
+    radial-gradient(600px 300px at 15% 20%,rgba(31,168,154,.16),transparent 70%),
+    radial-gradient(500px 280px at 85% 70%,rgba(36,86,196,.14),transparent 70%);
+}
+
+.hint{
+  position:fixed;bottom:20px;right:20px;z-index:80;
+  background:var(--ink);color:rgba(255,255,255,.85);font-size:12.5px;
+  padding:10px 16px;border-radius:10px;box-shadow:0 14px 30px -14px rgba(12,26,58,.6);
+}
+
+/* ============ ANIMAÇÕES ============ */
+@keyframes breath{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+@keyframes shine{0%{left:-90%}18%,100%{left:160%}}
+@keyframes halo{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(60px,40px) scale(1.08)}}
+
+/* ============ MOBILE ============ */
+@media (max-width:900px){
+  .header-inner{padding:8px 14px}
+  .nav{
+    position:fixed;inset:auto 14px 14px auto;flex-direction:column;gap:2px;
+    min-width:230px;padding:12px;border-radius:18px;
+    background:var(--glass-bg-strong);
+    -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-border);box-shadow:var(--glass-shadow-float);
+    opacity:0;pointer-events:none;transform:translateY(12px) scale(.97);
+    transition:all .4s var(--ease-out);
+  }
+  body.menu-open .nav{opacity:1;pointer-events:auto;transform:none}
+  .nav a{padding:12px 16px;font-size:15px}
+  .header .cta{display:none}
+  .burger{display:block;margin-left:auto}
+  .hero{padding:120px 16px 60px}
+  .hero-grid{grid-template-columns:1fr;gap:30px}
+  .glass-hero{padding:30px 24px}
+  .glass-photo{transform:none;max-width:420px}
+  .islands{grid-template-columns:1fr}
+  .section{padding:64px 16px}
+}
+
+/* ============ MOVIMENTO REDUZIDO ============ */
+@media (prefers-reduced-motion:reduce){
+  .brand-mark,.brand-mark::after,.brand-mark::before,.glass-hero,.blob{animation:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header class="header" id="header">
+  <div class="header-inner">
+    <a class="brand" href="#top" aria-label="Modo Fisio — início">
+      <span class="brand-mark"><img src="assets/images/logo-mark-160.jpg" alt=""></span>
+      <span class="brand-name"><b>Modo Fisio</b><small>Fisioterapia &amp; Pilates</small></span>
+    </a>
+    <nav class="nav" aria-label="Navegação principal">
+      <a href="#cuidados" class="active">Cuidados</a>
+      <a href="#ilhas">Benefícios</a>
+      <a href="#ilhas">Equipe</a>
+      <a href="#ilhas">Localização</a>
+    </nav>
+    <a class="cta" href="https://wa.me/5511974071234" target="_blank" rel="noopener">
+      Agendar avaliação
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <button class="burger" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+    <span class="header-progress" aria-hidden="true"><i id="headerBar"></i></span>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="hero-bg"><img src="assets/images/equipe-01.jpg" alt=""></div>
+    <div class="hero-warm" aria-hidden="true"></div>
+    <div class="blob blob-a"></div>
+    <div class="blob blob-b"></div>
+
+    <div class="hero-grid">
+      <!-- ilha 1: conteúdo -->
+      <div class="glass-hero">
+        <span class="kicker">Fisioterapia, Pilates e Estética em São Roque</span>
+        <h1>Seu corpo pede <em>cuidado</em> antes de pedir que você pare.</h1>
+        <p>Dor ao se movimentar, perda de força ou o desejo de voltar a se sentir bem no próprio corpo não precisam ser ignorados. Na Modo Fisio, cada cuidado começa entendendo você.</p>
+        <div class="actions">
+          <a class="cta" href="https://wa.me/5511974071234" target="_blank" rel="noopener">Agendar minha avaliação</a>
+          <a class="cta cta--ghost" href="#cuidados">Conhecer os cuidados</a>
+        </div>
+      </div>
+      <!-- ilha 2: foto polaroid de vidro -->
+      <figure class="glass-photo">
+        <img src="assets/images/equipe-02.jpg" alt="Equipe da Modo Fisio">
+        <figcaption>Equipe Modo Fisio <small>São Roque/SP</small></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section tinted" id="cuidados">
+    <div class="section-title">
+      <h2>Ilhas de vidro sobre o conteúdo</h2>
+      <p>Cada card é uma "ilha" liquid glass: blur, saturação, borda clara e brilho interno.</p>
+    </div>
+    <div class="islands" id="ilhas">
+      <div class="island">
+        <div class="island-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></div>
+        <h3>Fisioterapia</h3>
+        <p>Avaliação completa e tratamento voltado à sua queixa, com evolução acompanhada sessão a sessão.</p>
+      </div>
+      <div class="island">
+        <div class="island-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></div>
+        <h3>Pilates</h3>
+        <p>Fortalecimento e consciência corporal em aulas personalizadas ou em dupla, no seu ritmo.</p>
+      </div>
+      <div class="island">
+        <div class="island-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></div>
+        <h3>Estética</h3>
+        <p>Cuidados que unem bem-estar e autoestima, com protocolos seguros e acompanhamento profissional.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="hint">Teste isolado 2 — não afeta o site</div>
+
+<script>
+(function(){
+  var header = document.getElementById('header');
+  var bar = document.getElementById('headerBar');
+  // header ganha a ilha de vidro ao rolar
+  function onScroll(){
+    header.classList.toggle('scrolled', window.scrollY > 30);
+    var h = document.documentElement;
+    var p = Math.min(1, h.scrollTop / (h.scrollHeight - h.clientHeight));
+    // 1 = fora da tela (à direita) → 0 = preenchida da direita para a esquerda
+    bar.style.transform = 'translateX(' + ((1 - p) * 100) + '%)';
+  }
+  document.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  // brilho acolhedor seguindo o mouse no hero
+  var hero = document.querySelector('.hero');
+  hero.addEventListener('mousemove', function(e){
+    var r = hero.getBoundingClientRect();
+    hero.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    hero.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  }, { passive:true });
+
+  // menu mobile (drawer de vidro)
+  var burger = document.querySelector('.burger');
+  burger.addEventListener('click', function(){ document.body.classList.toggle('menu-open'); });
+  document.querySelectorAll('.nav a').forEach(function(a){
+    a.addEventListener('click', function(){ document.body.classList.remove('menu-open'); });
+  });
+})();
+</script>
+</body>
+</html>

@@ -112,6 +112,7 @@ em{font-style:italic}
 .mf-dark{background:var(--mf-blue-deep);color:var(--mf-on-dark-soft)}
 .mf-dark h1,.mf-dark h2,.mf-dark h3,.mf-dark h4{color:var(--mf-on-dark)}
 .mf-dark strong{color:var(--mf-on-dark)}
+.mf-dark .mf-lead{color:var(--mf-on-dark-soft)}
 .mf-dark .mf-kicker{color:var(--mf-accent)}
 .mf-dark .mf-rule{background:var(--mf-accent)}
 

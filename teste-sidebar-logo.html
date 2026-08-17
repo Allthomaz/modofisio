@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teste — Sidebar + Logo premium | Modo Fisio</title>
+<style>
+/* ============================================================
+   TESTE ISOLADO — não faz parte do site
+   Sidebar vertical premium + logo animada
+   Fontes carregadas do projeto (relativo)
+   ============================================================ */
+@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:500;font-display:swap;src:url("assets/fonts/pjs-500-latin.woff2") format("woff2")}
+@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:700;font-display:swap;src:url("assets/fonts/pjs-700-latin.woff2") format("woff2")}
+@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:800;font-display:swap;src:url("assets/fonts/pjs-800-latin.woff2") format("woff2")}
+
+:root{
+  --blue:#023384; --blue-mid:#2456c4; --blue-deep:#011a4f;
+  --accent:#1fa89a; --accent-deep:#157f74;
+  --ink:#0c1a3a; --paper:#f4f7fb; --line:#dde4ef;
+  --font:"Plus Jakarta Sans",system-ui,sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+*{margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--paper);color:#3a4a66;line-height:1.62;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+
+/* ============ LAYOUT ============ */
+.layout{display:flex;min-height:100vh}
+.content{flex:1;margin-left:272px;padding:56px 64px;transition:margin var(--ease) .45s}
+.layout.collapsed .content{margin-left:92px}
+
+/* ============ SIDEBAR ============ */
+.sidebar{
+  position:fixed;inset:0 auto 0 0;width:272px;z-index:100;
+  display:flex;flex-direction:column;
+  background:linear-gradient(175deg,#03296b 0%,var(--blue-deep) 58%,#010f33 100%);
+  color:#fff;
+  padding:30px 20px 24px;
+  transition:width var(--ease) .45s,transform var(--ease) .45s;
+  overflow:hidden;
+}
+.layout.collapsed .sidebar{width:92px}
+
+/* ---- LOGO ---- */
+.brand{
+  display:flex;align-items:center;gap:14px;
+  padding:6px 8px 24px;margin-bottom:14px;
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+.brand-mark{
+  position:relative;width:48px;height:48px;flex:0 0 auto;
+  border-radius:13px;overflow:hidden;
+  box-shadow:0 10px 26px -10px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.14);
+  animation:breath 4.2s var(--ease) infinite;
+}
+.brand-mark img{width:100%;height:100%;object-fit:cover}
+/* brilho que percorre a logo (shine) */
+.brand-mark::after{
+  content:"";position:absolute;inset:-40% auto -40% -90%;width:55%;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:skewX(-18deg);
+  animation:shine 5.5s var(--ease) infinite;
+  animation-delay:1.2s;
+}
+/* halo verde-água pulsando atrás */
+.brand-mark::before{
+  content:"";position:absolute;inset:-6px;border-radius:17px;z-index:-1;
+  background:radial-gradient(closest-side,rgba(31,168,154,.45),transparent 72%);
+  animation:halo 4.2s var(--ease) infinite;
+}
+.brand-name{
+  font-weight:800;font-size:19px;letter-spacing:.4px;color:#fff;line-height:1.15;
+  white-space:nowrap;
+}
+.brand-name small{
+  display:block;font-weight:500;font-size:10.5px;letter-spacing:2.6px;
+  text-transform:uppercase;color:rgba(255,255,255,.55);margin-top:3px;
+}
+/* palavra entra com stagger quando o menu abre */
+.brand-name span{display:inline-block;opacity:0;transform:translateY(10px)}
+.sidebar.open .brand-name span{animation:wordIn .6s var(--ease-out) forwards}
+.sidebar.open .brand-name span:nth-child(2){animation-delay:.08s}
+.sidebar.open .brand-name span:nth-child(3){animation-delay:.16s}
+.sidebar.open .brand-name span:nth-child(4){animation-delay:.24s}
+.sidebar.open .brand-name small{animation:wordIn .6s .34s var(--ease-out) forwards}
+
+/* ---- NAV ---- */
+.nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.nav-label{
+  font-size:10.5px;letter-spacing:2.4px;text-transform:uppercase;
+  color:rgba(255,255,255,.42);padding:14px 14px 10px;white-space:nowrap;
+  transition:opacity .3s var(--ease);
+}
+.nav a{
+  position:relative;display:flex;align-items:center;gap:13px;
+  padding:12px 14px;border-radius:11px;
+  color:rgba(255,255,255,.72);font-weight:500;font-size:14.5px;
+  white-space:nowrap;
+  transition:color .3s var(--ease),background .3s var(--ease);
+}
+.nav a svg{width:19px;height:19px;flex:0 0 auto;opacity:.75;transition:all .3s var(--ease)}
+/* indicador lateral deslizante */
+.nav a::before{
+  content:"";position:absolute;left:0;top:50%;height:0;width:3px;border-radius:3px;
+  background:var(--accent);transform:translateY(-50%);
+  transition:height .35s var(--ease-out),box-shadow .35s var(--ease);
+}
+.nav a:hover{color:#fff;background:rgba(255,255,255,.06)}
+.nav a:hover svg{opacity:1;transform:translateX(2px)}
+.nav a.active{color:#fff;background:linear-gradient(90deg,rgba(31,168,154,.16),transparent 80%)}
+.nav a.active::before{height:60%;box-shadow:0 0 14px rgba(31,168,154,.8)}
+.nav a.active svg{opacity:1;color:var(--accent)}
+.nav a .txt{transition:opacity .25s var(--ease)}
+
+/* ---- RODAPÉ DA SIDEBAR ---- */
+.side-foot{
+  border-top:1px solid rgba(255,255,255,.10);padding-top:16px;margin-top:14px;
+  white-space:nowrap;
+}
+.side-cta{
+  display:block;text-align:center;background:var(--accent);color:#02142e;
+  font-weight:700;font-size:14px;padding:12px 18px;border-radius:10px;
+  box-shadow:0 12px 26px -12px rgba(31,168,154,.65);
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease),background .3s;
+}
+.side-cta:hover{background:#23c2b3;transform:translateY(-2px);box-shadow:0 16px 32px -12px rgba(31,168,154,.8)}
+/* progresso de leitura */
+.progress{
+  margin-top:16px;height:4px;border-radius:4px;background:rgba(255,255,255,.12);
+  overflow:hidden;
+}
+.progress i{
+  display:block;height:100%;width:0%;
+  background:linear-gradient(90deg,var(--accent),#5ad6c9);
+  border-radius:4px;transition:width .18s linear;
+}
+.progress-label{font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:rgba(255,255,255,.42);margin-top:8px;text-align:center}
+
+/* ---- BOTÃO RECOLHER ---- */
+.collapse-btn{
+  position:absolute;top:26px;right:14px;width:26px;height:26px;
+  border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);
+  transition:transform .4s var(--ease),background .3s;
+}
+.collapse-btn:hover{background:rgba(255,255,255,.16)}
+.layout.collapsed .collapse-btn{transform:rotate(180deg)}
+.collapse-btn svg{width:13px;height:13px}
+
+/* estado recolhido: só ícones */
+.layout.collapsed .brand{justify-content:center;padding-bottom:22px}
+.layout.collapsed .brand-name,.layout.collapsed .nav-label,.layout.collapsed .nav a .txt,
+.layout.collapsed .side-cta,.layout.collapsed .progress,.layout.collapsed .progress-label{opacity:0;pointer-events:none}
+.layout.collapsed .nav a{justify-content:center;padding:13px 0}
+.layout.collapsed .nav a::before{left:4px}
+
+/* ---- BOTÃO MOBILE ---- */
+.burger{
+  display:none;position:fixed;top:18px;left:18px;z-index:120;
+  width:46px;height:46px;border-radius:12px;border:1px solid var(--line);
+  background:#fff;box-shadow:0 8px 22px -10px rgba(2,51,132,.35);
+  cursor:pointer;padding:13px;
+}
+.burger span{display:block;height:2px;background:var(--blue);border-radius:2px;position:relative;transition:all .35s var(--ease)}
+.burger span+span{margin-top:6px}
+body.menu-open .burger span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+body.menu-open .burger span:nth-child(2){opacity:0}
+body.menu-open .burger span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+
+.overlay{
+  display:none;position:fixed;inset:0;z-index:90;
+  background:rgba(1,15,51,.55);backdrop-filter:blur(3px);
+  opacity:0;transition:opacity .4s var(--ease);
+}
+
+/* ============ CONTEÚDO DEMO ============ */
+.section{max-width:760px;margin:0 auto 96px;scroll-margin-top:24px}
+.section h2{color:var(--ink);font-size:30px;font-weight:800;letter-spacing:-.4px;margin-bottom:14px}
+.section h2 em{font-style:normal;color:var(--accent-deep)}
+.section p{font-size:16.5px}
+.hero-demo{
+  max-width:760px;margin:0 auto 96px;padding:72px 0 8px;
+}
+.hero-demo h1{color:var(--ink);font-size:42px;font-weight:800;letter-spacing:-.8px;line-height:1.15;margin-bottom:16px}
+.hero-demo .tag{
+  display:inline-block;background:#e3f4f1;color:var(--accent-deep);
+  font-size:12.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+  padding:7px 14px;border-radius:999px;margin-bottom:22px;
+}
+.hint{
+  position:fixed;bottom:20px;right:20px;z-index:80;
+  background:var(--ink);color:rgba(255,255,255,.85);font-size:12.5px;
+  padding:10px 16px;border-radius:10px;box-shadow:0 14px 30px -14px rgba(12,26,58,.6);
+}
+
+/* ============ ANIMAÇÕES ============ */
+@keyframes breath{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+@keyframes shine{0%{left:-90%}18%,100%{left:160%}}
+@keyframes halo{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
+@keyframes wordIn{to{opacity:1;transform:translateY(0)}}
+
+/* ---- MOBILE ---- */
+@media (max-width:900px){
+  .sidebar{width:296px;transform:translateX(-102%);padding-top:84px}
+  .layout.collapsed .sidebar{width:296px}
+  body.menu-open .sidebar{transform:translateX(0)}
+  body.menu-open .sidebar .brand-name span,
+  body.menu-open .sidebar .brand-name small{animation:wordIn .6s var(--ease-out) forwards}
+  body.menu-open .overlay{display:block;opacity:1}
+  .content{margin-left:0!important;padding:84px 22px 48px}
+  .burger{display:block}
+  .collapse-btn{display:none}
+  .layout.collapsed .brand{justify-content:flex-start}
+  .layout.collapsed .brand-name,.layout.collapsed .nav-label,.layout.collapsed .nav a .txt,
+  .layout.collapsed .side-cta,.layout.collapsed .progress,.layout.collapsed .progress-label{opacity:1;pointer-events:auto}
+  .layout.collapsed .nav a{justify-content:flex-start;padding:12px 14px}
+  .hero-demo h1{font-size:32px}
+}
+
+/* ---- Acessibilidade: movimento reduzido ---- */
+@media (prefers-reduced-motion:reduce){
+  .brand-mark,.brand-mark::after,.brand-mark::before{animation:none}
+  .brand-name span,.brand-name small{opacity:1!important;transform:none!important;animation:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<button class="burger" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+<div class="overlay"></div>
+
+<div class="layout" id="layout">
+  <aside class="sidebar" id="sidebar">
+    <button class="collapse-btn" aria-label="Recolher menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+
+    <a class="brand" href="#top" aria-label="Modo Fisio — início">
+      <span class="brand-mark"><img src="assets/images/logo-modo-fisio.png" alt=""></span>
+      <span class="brand-name">
+        <span>MODO&nbsp;</span><span>FISIO</span>
+        <small>Fisioterapia &amp; Pilates</small>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Navegação principal">
+      <div class="nav-label">Navegar</div>
+      <a href="#servicos" data-nav>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+        <span class="txt">Serviços</span>
+      </a>
+      <a href="#beneficios" data-nav>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V4m12 5V4M2 20a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4M6 10h12v4H6z"/></svg>
+        <span class="txt">Benefícios</span>
+      </a>
+      <a href="#equipe" data-nav>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm14 10v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="txt">Equipe</span>
+      </a>
+      <a href="#avaliacoes" data-nav>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+        <span class="txt">Avaliações</span>
+      </a>
+      <a href="#localizacao" data-nav>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span class="txt">Localização</span>
+      </a>
+    </nav>
+
+    <div class="side-foot">
+      <a class="side-cta" href="https://wa.me/5511974071234" target="_blank" rel="noopener">Agendar avaliação</a>
+      <div class="progress"><i id="bar"></i></div>
+      <div class="progress-label" id="pct">0% lido</div>
+    </div>
+  </aside>
+
+  <main class="content" id="top">
+    <div class="hero-demo">
+      <span class="tag">Teste isolado — sidebar + logo</span>
+      <h1>Uma sidebar com presença, sem pesar.</h1>
+      <p>Este arquivo é independente do site. Teste: recolha o menu (setinha no topo da sidebar), role a página para ver o item ativo e o progresso de leitura, redimensione a janela para o modo mobile e observe a logo.</p>
+    </div>
+
+    <section class="section" id="servicos"><h2>Serviços <em>— seção demo</em></h2><p>Rolou até aqui? O item "Serviços" deverá estar ativo na sidebar, com a barra verde-água acesa. Texto de preenchimento para dar altura de rolagem à página de teste. Continue descendo para ver o indicador de progresso acompanhar.</p><p style="margin-top:12px">Mais um parágrafo para altura. Em fisioterapia, movimento é tratamento — e aqui o movimento é da interface: tudo com transições suaves e fallback para quem prefere menos animação.</p></section>
+    <section class="section" id="beneficios"><h2>Benefícios <em>— seção demo</em></h2><p>Seção de preenchimento. A sidebar permanece fixa enquanto o conteúdo rola. O efeito de brilho na logo ocorre a cada poucos segundos, com respiração contínua entre um passe e outro.</p><p style="margin-top:12px">Preenchimento adicional para garantir rolagem suficiente entre as seções e demonstrar a troca de item ativo com a devida defasagem de animação.</p></section>
+    <section class="section" id="equipe"><h2>Equipe <em>— seção demo</em></h2><p>Seção de preenchimento. No modo recolhido, os ícones centram e os rótulos desaparecem com fade — sem quebra de layout.</p><p style="margin-top:12px">Mais preenchimento para altura de rolagem. A barra de progresso lá embaixo na sidebar reflete quanto da página você já percorreu.</p></section>
+    <section class="section" id="avaliacoes"><h2>Avaliações <em>— seção demo</em></h2><p>Seção de preenchimento. Repare no halo verde-água atrás da logo: ele pulsa em ciclo de pouco mais de quatro segundos, imitando respiração.</p><p style="margin-top:12px">Preenchimento para rolagem. Quase lá — falta pouco para a barra de progresso completar.</p></section>
+    <section class="section" id="localizacao"><h2>Localização <em>— seção demo</em></h2><p>Última seção. Se você chegou até aqui, a barra de progresso deve estar perto de 100%. O botão "Agendar avaliação" mantém a cor de ação da marca, com elevação no hover.</p></section>
+  </main>
+</div>
+
+<div class="hint">Teste isolado — não afeta o site</div>
+
+<script>
+(function(){
+  var layout = document.getElementById('layout');
+  var sidebar = document.getElementById('sidebar');
+  var burger = document.querySelector('.burger');
+  var overlay = document.querySelector('.overlay');
+  var bar = document.getElementById('bar');
+  var pct = document.getElementById('pct');
+
+  // abre "tagged" p/ animação de entrada das palavras da logo
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ sidebar.classList.add('open'); }); });
+
+  // recolher / expandir (desktop)
+  document.querySelector('.collapse-btn').addEventListener('click', function(){
+    layout.classList.toggle('collapsed');
+  });
+
+  // mobile
+  function closeMenu(){ document.body.classList.remove('menu-open'); }
+  burger.addEventListener('click', function(){ document.body.classList.toggle('menu-open'); });
+  overlay.addEventListener('click', closeMenu);
+  document.querySelectorAll('.nav a').forEach(function(a){ a.addEventListener('click', closeMenu); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeMenu(); });
+
+  // item ativo por seção visível
+  var links = document.querySelectorAll('[data-nav]');
+  var sections = [].map.call(links, function(a){ return document.querySelector(a.getAttribute('href')); });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(!en.isIntersecting) return;
+      links.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#' + en.target.id); });
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(function(s){ if(s) io.observe(s); });
+
+  // progresso de leitura
+  function onScroll(){
+    var h = document.documentElement;
+    var p = Math.min(100, Math.round(h.scrollTop / (h.scrollHeight - h.clientHeight) * 100));
+    bar.style.width = p + '%';
+    pct.textContent = p + '% lido';
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>
