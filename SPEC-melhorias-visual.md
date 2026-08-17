@@ -61,10 +61,8 @@ Layout **institucional** (igual ao site original), SEM cards flutuantes:
 - **Foto da equipe:** `modofisio_2025_043.JPG`, moldura limpa (raio 22px),
   selo "São Roque/SP" em pílula neutra fria, sem moldura de vidro.
   Fotos testadas: _033 (substituída), _043 (atual).
-- **Hover da foto:** zoom mínimo (scale 1.015) + **partículas azuladas
-  sutis** (canvas, ~22 partículas, matiz 208-226, 0.8-2.6px) que sobem
-  lentamente; só animam com mouse sobre a foto; desativadas com
-  `prefers-reduced-motion`.
+- **Hover da foto:** zoom mínimo (scale 1.015). Partículas azuladas em canvas:
+  **removidas a pedido** (testadas e rejeitadas).
 - **Brilho que seguia o mouse pela hero: REMOVIDO** (testado em âmbar e
   azul; rejeitado).
 - Animação "polaroid" (inclinar/endireitar) da foto: **rejeitada**.
