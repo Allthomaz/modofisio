@@ -283,7 +283,8 @@ em{font-style:italic}
    HERO
    ============================================================ */
 /* ---------- Hero (coluna de fundo + véu fino — SPEC §4) ---------- */
-.mf-hero{position:relative;border-bottom:1px solid var(--mf-line)}
+/* clip: permite a coluna subir atrás do header, mas impede sangria na seção seguinte */
+.mf-hero{position:relative;border-bottom:1px solid var(--mf-line);clip-path:inset(calc(-1*var(--mf-hero-lift,92px)) 0 0 0)}
 /* coluna e véu sobem atrás do header sticky (como no protótipo fixed) */
 .mf-hero-spine{position:absolute;left:0;right:0;bottom:0;top:calc(-1*var(--mf-hero-lift,92px));z-index:0;pointer-events:none;will-change:transform}
 .mf-hero-spine img{width:100%;height:100%;object-fit:cover;object-position:center}
