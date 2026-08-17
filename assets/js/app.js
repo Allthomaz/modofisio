@@ -37,6 +37,12 @@
     var navLinks = Array.prototype.slice.call(document.querySelectorAll('.mf-nav a[href^="#"]'));
     var spine = document.querySelector(".mf-hero-spine");
     var hero = document.querySelector(".mf-hero");
+    /* coluna sobe atrás do header: mede a altura real dele */
+    function setHeroLift() {
+      if (header) root.style.setProperty("--mf-hero-lift", header.offsetHeight + "px");
+    }
+    setHeroLift();
+    window.addEventListener("resize", setHeroLift, { passive: true });
     var sections = navLinks
       .map(function (a) { return document.querySelector(a.getAttribute("href")); })
       .filter(Boolean);
