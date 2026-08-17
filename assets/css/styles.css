@@ -317,7 +317,7 @@ em{font-style:italic}
 
 @media (max-width:900px){
   .mf-hero-grid{grid-template-columns:1fr;gap:34px;min-height:auto;padding:48px 0}
-  .mf-hero-media{order:-1;min-height:300px}
+  .mf-hero-media{min-height:300px}
   .mf-hero-media .mf-hero-photo-box{width:min(72%,360px)}
 }
 
