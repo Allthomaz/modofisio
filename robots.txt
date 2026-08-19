@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /teste-
+
+Sitemap: https://modofisio.com.br/sitemap.xml
